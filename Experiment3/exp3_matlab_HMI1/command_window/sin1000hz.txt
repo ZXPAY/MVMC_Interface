@@ -1,0 +1,58 @@
+
+msg =
+
+    'How many ADC data do you want ?Please enter the number do you want ...
+     '
+
+100
+
+ADCNumber =
+
+   100
+
+
+msg =
+
+    'DataNumbers is 100
+     '
+
+
+msg =
+
+    'Run Main code, start to get data ...
+     '
+
+
+msg =
+
+    'OK->100, 1310720
+     '
+
+
+msg =
+
+    '28, 287, 5
+     '
+
+
+msg =
+
+    'OK, Read SDC Data and send to matlab ...
+     '
+
+
+Fs =
+
+        5000
+
+
+Hz =
+
+  895.7373
+
+
+Amp =
+
+  172.7405
+
+>> 
