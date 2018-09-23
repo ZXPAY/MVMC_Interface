@@ -1,5 +1,6 @@
 #include "M128_Danny_SDC.h"
 #include <stdio.h>
+#include <string.h>
 #include <inttypes.h>
 #include "SDC00/ASA_lib_SDC00.h"
 

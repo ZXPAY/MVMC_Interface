@@ -1,6 +1,6 @@
 clc, clear, close all
 
-portNumber = 4;
+portNumber = 18;
 
 DataAcquisitionSystem = struct('TimeConsumeMS', uint32([0]));
 
@@ -31,6 +31,8 @@ remo_close(port);
 getDataArray
 dotGenerate = linspace(0, double(0.5*ADCNumber), ADCNumber);
 
+norm_data = (getDataArray - min(getDataArray)) / (max(getDataArray) - min(getDataArray));
+
 plot(dotGenerate, getDataArray);
 xlim([0, 0.5*ADCNumber]);
 ylim([0,1023]);
@@ -55,9 +57,8 @@ ylabel('|P1(f)|');
 [Hz, Amp] = ginput(1)   % use mouth click the picture
 
 
-% for k=1:100
-%    sound(Hz); 
-% end
+sound(norm_data, Fs);
+
 
 
 

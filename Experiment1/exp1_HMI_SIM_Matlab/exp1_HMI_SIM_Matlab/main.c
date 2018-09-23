@@ -21,15 +21,15 @@
 #define ParaYColSize 1
 #define ParaURowSize 1
 #define ParaUColSize 1
-#define ExecuteTimes 100
+#define ExecuteTimes 150
 
 void setMatrixTheSame(float *mat1, float *mat2, int row, int col);
 void MatDotProduct(float* ptr_m1, float* ptr_m2, float* ptr_dot, int row1, int col1, int col2);
 
 struct StateSpace{
 	uint16_t SamplingCounter;
-	float xState[100+1][2];
-	float yState[100][1];
+	float xState[ExecuteTimes+1][2];
+	float yState[ExecuteTimes][1];
 	float paraA[ParaARowSize][ParaAColSize];
 	float paraB[ParaBRowSize][ParaBColSize];
 	float paraC[ParaCRowSize][ParaCColSize];
@@ -49,9 +49,9 @@ struct StateSpaceInput{
 }StateSpaceInput;
 
 struct sendStruct{
-	float X0[100];
-	float X1[100];
-	float y[100];
+	//float X0[ExecuteTimes];
+	//float X1[ExecuteTimes];
+	float y[ExecuteTimes];
 }sendStruct;
 
 void printParameter(){
@@ -196,15 +196,16 @@ int main(void){
 		M128_HMI_Form_get("f32x1", 4, &StateSpaceInput);
 		StateSpace.paraU[0][counter] = StateSpaceInput.paraInput;
 		updateStateSpace(counter);
-		printf("%.2f, %.2f, %.2f, %.2f\r\n", StateSpace.paraU[0][counter], StateSpace.xState[counter][0], StateSpace.xState[counter][1],
-			StateSpace.yState[counter][0]);
-		sendStruct.X0[counter] = StateSpace.xState[counter][0];
-		sendStruct.X1[counter] = StateSpace.xState[counter][1];
+		//printf("%.2f, %.2f, %.2f, %.2f\r\n", StateSpace.paraU[0][counter], StateSpace.xState[counter][0], StateSpace.xState[counter][1],
+			//StateSpace.yState[counter][0]);
+		printf("%.2f\n", StateSpace.yState[counter][0]);
+		//sendStruct.X0[counter] = StateSpace.xState[counter][0];
+		//sendStruct.X1[counter] = StateSpace.xState[counter][1];
 		sendStruct.y[counter] = StateSpace.yState[counter][0];
 		
 	}
 	//M128_HMI_Form_put("ui16x1,f32x1,f32x1,f32x1", 14, &sendStruct);
-	M128_HMI_Form_put("f32x100,f32x100,f32x100", 1200, &sendStruct);
+	M128_HMI_Form_put("f32x150", 600, &sendStruct);
 
     while (1) {
 		

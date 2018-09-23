@@ -7,7 +7,7 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, ALLOC, LOAD, DATA
   1 .text         000029dc  00000000  00000000  00000094  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .bss          00000682  008002ba  008002ba  00002c2a  2**0
+  2 .bss          000009a2  008002ba  008002ba  00002c2a  2**0
                   ALLOC
   3 .comment      0000005c  00000000  00000000  00002c2a  2**0
                   CONTENTS, READONLY
@@ -25,11 +25,11 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING
  10 .debug_frame  0000046c  00000000  00000000  000063f4  2**2
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_str    00000778  00000000  00000000  00006860  2**0
+ 11 .debug_str    00000783  00000000  00000000  00006860  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_loc    00001796  00000000  00000000  00006fd8  2**0
+ 12 .debug_loc    00001796  00000000  00000000  00006fe3  2**0
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_ranges 00000140  00000000  00000000  0000876e  2**0
+ 13 .debug_ranges 00000140  00000000  00000000  00008779  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -170,7 +170,7 @@ Disassembly of section .text:
      200:	d9 f7       	brne	.-10     	; 0x1f8 <__do_copy_data+0x10>
 
 00000202 <__do_clear_bss>:
-     202:	29 e0       	ldi	r18, 0x09	; 9
+     202:	2c e0       	ldi	r18, 0x0C	; 12
      204:	aa eb       	ldi	r26, 0xBA	; 186
      206:	b2 e0       	ldi	r27, 0x02	; 2
      208:	01 c0       	rjmp	.+2      	; 0x20c <.do_clear_bss_start>
@@ -179,7 +179,7 @@ Disassembly of section .text:
      20a:	1d 92       	st	X+, r1
 
 0000020c <.do_clear_bss_start>:
-     20c:	ac 33       	cpi	r26, 0x3C	; 60
+     20c:	ac 35       	cpi	r26, 0x5C	; 92
      20e:	b2 07       	cpc	r27, r18
      210:	e1 f7       	brne	.-8      	; 0x20a <.do_clear_bss_loop>
      212:	09 d7       	rcall	.+3602   	; 0x1026 <main>
@@ -413,10 +413,10 @@ Disassembly of section .text:
      3c6:	80 83       	st	Z, r24
      3c8:	85 e0       	ldi	r24, 0x05	; 5
      3ca:	91 e0       	ldi	r25, 0x01	; 1
-     3cc:	90 93 39 09 	sts	0x0939, r25	; 0x800939 <__iob+0x3>
-     3d0:	80 93 38 09 	sts	0x0938, r24	; 0x800938 <__iob+0x2>
-     3d4:	90 93 37 09 	sts	0x0937, r25	; 0x800937 <__iob+0x1>
-     3d8:	80 93 36 09 	sts	0x0936, r24	; 0x800936 <__iob>
+     3cc:	90 93 59 0c 	sts	0x0C59, r25	; 0x800c59 <__iob+0x3>
+     3d0:	80 93 58 0c 	sts	0x0C58, r24	; 0x800c58 <__iob+0x2>
+     3d4:	90 93 57 0c 	sts	0x0C57, r25	; 0x800c57 <__iob+0x1>
+     3d8:	80 93 56 0c 	sts	0x0C56, r24	; 0x800c56 <__iob>
      3dc:	80 e0       	ldi	r24, 0x00	; 0
      3de:	08 95       	ret
 
@@ -630,8 +630,8 @@ void printParameter(){
      566:	83 ea       	ldi	r24, 0xA3	; 163
      568:	91 e0       	ldi	r25, 0x01	; 1
      56a:	0e 94 42 14 	call	0x2884	; 0x2884 <puts>
-     56e:	c2 e8       	ldi	r28, 0x82	; 130
-     570:	d7 e0       	ldi	r29, 0x07	; 7
+     56e:	ca ed       	ldi	r28, 0xDA	; 218
+     570:	d9 e0       	ldi	r29, 0x09	; 9
 	for(int i=0;i<ParaARowSize;i++){
      572:	00 e0       	ldi	r16, 0x00	; 0
      574:	10 e0       	ldi	r17, 0x00	; 0
@@ -706,8 +706,8 @@ void printParameter(){
 	for(int i=0;i<ParaBRowSize;i++){
 		for(int j=0;j<ParaBColSize;j++){
 			printf("B[%d][%d]=%f\n", i, j, StateSpace.paraB[i][j]);
-     5ea:	e2 e9       	ldi	r30, 0x92	; 146
-     5ec:	f7 e0       	ldi	r31, 0x07	; 7
+     5ea:	ea ee       	ldi	r30, 0xEA	; 234
+     5ec:	f9 e0       	ldi	r31, 0x09	; 9
      5ee:	83 81       	ldd	r24, Z+3	; 0x03
      5f0:	8f 93       	push	r24
      5f2:	82 81       	ldd	r24, Z+2	; 0x02
@@ -725,8 +725,8 @@ void printParameter(){
      60a:	df 93       	push	r29
      60c:	cf 93       	push	r28
      60e:	0e 94 2e 14 	call	0x285c	; 0x285c <printf>
-     612:	e6 e9       	ldi	r30, 0x96	; 150
-     614:	f7 e0       	ldi	r31, 0x07	; 7
+     612:	ee ee       	ldi	r30, 0xEE	; 238
+     614:	f9 e0       	ldi	r31, 0x09	; 9
      616:	83 81       	ldd	r24, Z+3	; 0x03
      618:	8f 93       	push	r24
      61a:	82 81       	ldd	r24, Z+2	; 0x02
@@ -752,8 +752,8 @@ void printParameter(){
 	for(int i=0;i<ParaCRowSize;i++){
 		for(int j=0;j<ParaCColSize;j++){
 			printf("C[%d][%d]=%f\n", i, j, StateSpace.paraC[i][j]);
-     640:	ea e9       	ldi	r30, 0x9A	; 154
-     642:	f7 e0       	ldi	r31, 0x07	; 7
+     640:	e2 ef       	ldi	r30, 0xF2	; 242
+     642:	f9 e0       	ldi	r31, 0x09	; 9
      644:	83 81       	ldd	r24, Z+3	; 0x03
      646:	8f 93       	push	r24
      648:	82 81       	ldd	r24, Z+2	; 0x02
@@ -771,8 +771,8 @@ void printParameter(){
      660:	df 93       	push	r29
      662:	cf 93       	push	r28
      664:	0e 94 2e 14 	call	0x285c	; 0x285c <printf>
-     668:	ee e9       	ldi	r30, 0x9E	; 158
-     66a:	f7 e0       	ldi	r31, 0x07	; 7
+     668:	e6 ef       	ldi	r30, 0xF6	; 246
+     66a:	f9 e0       	ldi	r31, 0x09	; 9
      66c:	83 81       	ldd	r24, Z+3	; 0x03
      66e:	8f 93       	push	r24
      670:	82 81       	ldd	r24, Z+2	; 0x02
@@ -805,8 +805,8 @@ void printParameter(){
 	for(int i=0;i<ParaDRowSize;i++){
 		for(int j=0;j<ParaDColSize;j++){
 			printf("D[%d][%d]=%f\n", i, j, StateSpace.paraD[i][j]);
-     6a4:	e2 ea       	ldi	r30, 0xA2	; 162
-     6a6:	f7 e0       	ldi	r31, 0x07	; 7
+     6a4:	ea ef       	ldi	r30, 0xFA	; 250
+     6a6:	f9 e0       	ldi	r31, 0x09	; 9
      6a8:	83 81       	ldd	r24, Z+3	; 0x03
      6aa:	8f 93       	push	r24
      6ac:	82 81       	ldd	r24, Z+2	; 0x02
@@ -940,8 +940,8 @@ void setMatrixTheSame(float *mat1, float *mat2, int row, int col){
 00000776 <initStateStateInput>:
 
 void initStateStateInput(){
-     776:	e6 ea       	ldi	r30, 0xA6	; 166
-     778:	f7 e0       	ldi	r31, 0x07	; 7
+     776:	ee ef       	ldi	r30, 0xFE	; 254
+     778:	f9 e0       	ldi	r31, 0x09	; 9
      77a:	81 e0       	ldi	r24, 0x01	; 1
      77c:	90 e0       	ldi	r25, 0x00	; 0
 	for(int i=0;i<ExecuteTimes;i++){
@@ -993,7 +993,7 @@ void initStateStateInput(){
 
 void initStateStateInput(){
 	for(int i=0;i<ExecuteTimes;i++){
-     7a8:	84 36       	cpi	r24, 0x64	; 100
+     7a8:	86 39       	cpi	r24, 0x96	; 150
      7aa:	91 05       	cpc	r25, r1
      7ac:	74 f3       	brlt	.-36     	; 0x78a <initStateStateInput+0x14>
 		}
@@ -1734,8 +1734,8 @@ void updateStateSpace(int counter){
      c50:	4f 5f       	subi	r20, 0xFF	; 255
      c52:	5f 4f       	sbci	r21, 0xFF	; 255
      c54:	b5 01       	movw	r22, r10
-     c56:	82 e8       	ldi	r24, 0x82	; 130
-     c58:	97 e0       	ldi	r25, 0x07	; 7
+     c56:	8a ed       	ldi	r24, 0xDA	; 218
+     c58:	99 e0       	ldi	r25, 0x09	; 9
      c5a:	aa dd       	rcall	.-1196   	; 0x7b0 <MatDotProduct>
 		&buffer1[0][0], ParaARowSize, ParaAColSize, ParaXColSize);
 		
@@ -1747,8 +1747,8 @@ void updateStateSpace(int counter){
      c62:	88 0c       	add	r8, r8
      c64:	99 1c       	adc	r9, r9
      c66:	b4 01       	movw	r22, r8
-     c68:	6a 55       	subi	r22, 0x5A	; 90
-     c6a:	78 4f       	sbci	r23, 0xF8	; 248
+     c68:	62 50       	subi	r22, 0x02	; 2
+     c6a:	76 4f       	sbci	r23, 0xF6	; 246
      c6c:	01 e0       	ldi	r16, 0x01	; 1
      c6e:	10 e0       	ldi	r17, 0x00	; 0
      c70:	22 e0       	ldi	r18, 0x02	; 2
@@ -1756,8 +1756,8 @@ void updateStateSpace(int counter){
      c74:	ae 01       	movw	r20, r28
      c76:	47 5f       	subi	r20, 0xF7	; 247
      c78:	5f 4f       	sbci	r21, 0xFF	; 255
-     c7a:	82 e9       	ldi	r24, 0x92	; 146
-     c7c:	97 e0       	ldi	r25, 0x07	; 7
+     c7a:	8a ee       	ldi	r24, 0xEA	; 234
+     c7c:	99 e0       	ldi	r25, 0x09	; 9
      c7e:	98 dd       	rcall	.-1232   	; 0x7b0 <MatDotProduct>
 		&buffer2[0][0], ParaBRowSize, ParaBColSize, ParaUColSize);
 		
@@ -1791,8 +1791,8 @@ void updateStateSpace(int counter){
      cac:	4f 5e       	subi	r20, 0xEF	; 239
      cae:	5f 4f       	sbci	r21, 0xFF	; 255
      cb0:	b5 01       	movw	r22, r10
-     cb2:	8a e9       	ldi	r24, 0x9A	; 154
-     cb4:	97 e0       	ldi	r25, 0x07	; 7
+     cb2:	82 ef       	ldi	r24, 0xF2	; 242
+     cb4:	99 e0       	ldi	r25, 0x09	; 9
      cb6:	7c dd       	rcall	.-1288   	; 0x7b0 <MatDotProduct>
 		&buffer3[0][0], ParaCRowSize, ParaCColSize, ParaXColSize);
 		
@@ -1806,15 +1806,15 @@ void updateStateSpace(int counter){
      cc2:	4b 5e       	subi	r20, 0xEB	; 235
      cc4:	5f 4f       	sbci	r21, 0xFF	; 255
      cc6:	b5 01       	movw	r22, r10
-     cc8:	82 ea       	ldi	r24, 0xA2	; 162
-     cca:	97 e0       	ldi	r25, 0x07	; 7
+     cc8:	8a ef       	ldi	r24, 0xFA	; 250
+     cca:	99 e0       	ldi	r25, 0x09	; 9
      ccc:	71 dd       	rcall	.-1310   	; 0x7b0 <MatDotProduct>
 		&buffer4[0][0], ParaDRowSize, ParaDColSize, ParaUColSize);
 		
 	MatPlus(&buffer3[0][0], &buffer4[0][0], &StateSpace.yState[counter][0],
      cce:	a4 01       	movw	r20, r8
-     cd0:	4e 50       	subi	r20, 0x0E	; 14
-     cd2:	5a 4f       	sbci	r21, 0xFA	; 250
+     cd0:	4e 57       	subi	r20, 0x7E	; 126
+     cd2:	58 4f       	sbci	r21, 0xF8	; 248
      cd4:	21 e0       	ldi	r18, 0x01	; 1
      cd6:	30 e0       	ldi	r19, 0x00	; 0
      cd8:	be 01       	movw	r22, r28
@@ -2420,8 +2420,8 @@ int main(void){
     10b2:	be 01       	movw	r22, r28
     10b4:	6f 5f       	subi	r22, 0xFF	; 255
     10b6:	7f 4f       	sbci	r23, 0xFF	; 255
-    10b8:	82 e8       	ldi	r24, 0x82	; 130
-    10ba:	97 e0       	ldi	r25, 0x07	; 7
+    10b8:	8a ed       	ldi	r24, 0xDA	; 218
+    10ba:	99 e0       	ldi	r25, 0x09	; 9
     10bc:	1b db       	rcall	.-2506   	; 0x6f4 <setMatrixTheSame>
 	setMatrixTheSame(&StateSpace.paraB[0][0], &ParameterB[0][0], ParaBRowSize, ParaBColSize);
     10be:	21 e0       	ldi	r18, 0x01	; 1
@@ -2431,8 +2431,8 @@ int main(void){
     10c6:	be 01       	movw	r22, r28
     10c8:	6f 5e       	subi	r22, 0xEF	; 239
     10ca:	7f 4f       	sbci	r23, 0xFF	; 255
-    10cc:	82 e9       	ldi	r24, 0x92	; 146
-    10ce:	97 e0       	ldi	r25, 0x07	; 7
+    10cc:	8a ee       	ldi	r24, 0xEA	; 234
+    10ce:	99 e0       	ldi	r25, 0x09	; 9
     10d0:	11 db       	rcall	.-2526   	; 0x6f4 <setMatrixTheSame>
 	setMatrixTheSame(&StateSpace.paraC[0][0], &ParameterC[0][0], ParaCRowSize, ParaCColSize);
     10d2:	22 e0       	ldi	r18, 0x02	; 2
@@ -2442,8 +2442,8 @@ int main(void){
     10da:	be 01       	movw	r22, r28
     10dc:	67 5e       	subi	r22, 0xE7	; 231
     10de:	7f 4f       	sbci	r23, 0xFF	; 255
-    10e0:	8a e9       	ldi	r24, 0x9A	; 154
-    10e2:	97 e0       	ldi	r25, 0x07	; 7
+    10e0:	82 ef       	ldi	r24, 0xF2	; 242
+    10e2:	99 e0       	ldi	r25, 0x09	; 9
     10e4:	07 db       	rcall	.-2546   	; 0x6f4 <setMatrixTheSame>
 	setMatrixTheSame(&StateSpace.paraD[0][0], &ParameterD[0][0], ParaDRowSize, ParaDColSize);
     10e6:	21 e0       	ldi	r18, 0x01	; 1
@@ -2453,9 +2453,9 @@ int main(void){
     10ee:	be 01       	movw	r22, r28
     10f0:	6f 5d       	subi	r22, 0xDF	; 223
     10f2:	7f 4f       	sbci	r23, 0xFF	; 255
-    10f4:	82 ea       	ldi	r24, 0xA2	; 162
+    10f4:	8a ef       	ldi	r24, 0xFA	; 250
 	printParameter();
-    10f6:	97 e0       	ldi	r25, 0x07	; 7
+    10f6:	99 e0       	ldi	r25, 0x09	; 9
     10f8:	fd da       	rcall	.-2566   	; 0x6f4 <setMatrixTheSame>
 	initStateStateInput();
     10fa:	2e da       	rcall	.-2980   	; 0x558 <printParameter>
@@ -2500,9 +2500,9 @@ int main(void){
     1126:	0a ec       	ldi	r16, 0xCA	; 202
     1128:	12 e0       	ldi	r17, 0x02	; 2
     112a:	0f 2e       	mov	r0, r31
-    112c:	f2 ef       	ldi	r31, 0xF2	; 242
+    112c:	f2 e8       	ldi	r31, 0x82	; 130
     112e:	ef 2e       	mov	r14, r31
-    1130:	f5 e0       	ldi	r31, 0x05	; 5
+    1130:	f7 e0       	ldi	r31, 0x07	; 7
     1132:	ff 2e       	mov	r15, r31
 	setMatrixTheSame(&StateSpace.paraC[0][0], &ParameterC[0][0], ParaCRowSize, ParaCColSize);
 	setMatrixTheSame(&StateSpace.paraD[0][0], &ParameterD[0][0], ParaDRowSize, ParaDColSize);
@@ -2623,7 +2623,7 @@ int main(void){
     11f6:	d3 0a       	sbc	r13, r19
     11f8:	08 5f       	subi	r16, 0xF8	; 248
     11fa:	1f 4f       	sbci	r17, 0xFF	; 255
-    11fc:	84 e6       	ldi	r24, 0x64	; 100
+    11fc:	86 e9       	ldi	r24, 0x96	; 150
     11fe:	c8 16       	cp	r12, r24
     1200:	d1 04       	cpc	r13, r1
     1202:	09 f0       	breq	.+2      	; 0x1206 <__stack+0x107>
@@ -5583,8 +5583,8 @@ int main(void){
     286c:	61 91       	ld	r22, Z+
     286e:	71 91       	ld	r23, Z+
     2870:	af 01       	movw	r20, r30
-    2872:	80 91 38 09 	lds	r24, 0x0938	; 0x800938 <__iob+0x2>
-    2876:	90 91 39 09 	lds	r25, 0x0939	; 0x800939 <__iob+0x3>
+    2872:	80 91 58 0c 	lds	r24, 0x0C58	; 0x800c58 <__iob+0x2>
+    2876:	90 91 59 0c 	lds	r25, 0x0C59	; 0x800c59 <__iob+0x3>
     287a:	0e 94 bc 0a 	call	0x1578	; 0x1578 <vfprintf>
     287e:	df 91       	pop	r29
     2880:	cf 91       	pop	r28
@@ -5595,8 +5595,8 @@ int main(void){
     2886:	1f 93       	push	r17
     2888:	cf 93       	push	r28
     288a:	df 93       	push	r29
-    288c:	e0 91 38 09 	lds	r30, 0x0938	; 0x800938 <__iob+0x2>
-    2890:	f0 91 39 09 	lds	r31, 0x0939	; 0x800939 <__iob+0x3>
+    288c:	e0 91 58 0c 	lds	r30, 0x0C58	; 0x800c58 <__iob+0x2>
+    2890:	f0 91 59 0c 	lds	r31, 0x0C59	; 0x800c59 <__iob+0x3>
     2894:	23 81       	ldd	r18, Z+3	; 0x03
     2896:	21 ff       	sbrs	r18, 1
     2898:	1b c0       	rjmp	.+54     	; 0x28d0 <puts+0x4c>
@@ -5606,8 +5606,8 @@ int main(void){
     28a0:	f8 01       	movw	r30, r16
     28a2:	81 91       	ld	r24, Z+
     28a4:	8f 01       	movw	r16, r30
-    28a6:	60 91 38 09 	lds	r22, 0x0938	; 0x800938 <__iob+0x2>
-    28aa:	70 91 39 09 	lds	r23, 0x0939	; 0x800939 <__iob+0x3>
+    28a6:	60 91 58 0c 	lds	r22, 0x0C58	; 0x800c58 <__iob+0x2>
+    28aa:	70 91 59 0c 	lds	r23, 0x0C59	; 0x800c59 <__iob+0x3>
     28ae:	db 01       	movw	r26, r22
     28b0:	18 96       	adiw	r26, 0x08	; 8
     28b2:	ed 91       	ld	r30, X+

@@ -21,7 +21,7 @@
 #define ParaYColSize 1
 #define ParaURowSize 1
 #define ParaUColSize 1
-#define ExecuteTimes 100
+#define ExecuteTimes 150
 
 void setMatrixTheSame(float *mat1, float *mat2, int row, int col);
 void MatDotProduct(float* ptr_m1, float* ptr_m2, float* ptr_dot, int row1, int col1, int col2);
@@ -30,8 +30,8 @@ void testPlusMat();
 
 struct StateSpace{
 	uint16_t SamplingCounter;
-	float xState[100+1][2];
-	float yState[100][1];
+	float xState[ExecuteTimes+1][2];
+	float yState[ExecuteTimes][1];
 	float paraA[ParaARowSize][ParaAColSize];
 	float paraB[ParaBRowSize][ParaBColSize];
 	float paraC[ParaCRowSize][ParaCColSize];
