@@ -209,6 +209,10 @@ void setPWMTimer1Channel(char whichChannel){
 }
 void setTimer1Mode(char mode){
 	switch(mode){
+		case 0:
+			TCCR1A &= ~(1<<WGM10) & ~(1<<WGM11);
+			TCCR1B &= ~(1<<WGM12) & ~(1<<WGM13);
+		break;
 		case 14: // fast PWM
 			TCCR1A &= ~(1<<WGM10);
 			TCCR1A |= (1<<WGM11);

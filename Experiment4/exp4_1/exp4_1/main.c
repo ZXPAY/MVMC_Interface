@@ -6,13 +6,26 @@
  */ 
 #define F_CPU 11059200
 #include <avr/io.h>
+#include <stdbool.h>
+#include "lib/SDC00/ASA_lib_SDC00.h"
+#include "lib/M128_Danny_SDC.h"
 #include "ASA_Lib.h"
 #include "M128_Danny_Timer.h"
 #define pi 3.141592
 #define MaxSinDataNumbers 200
+#define PWMFrequency 20000
+#define SDC_FILE_NAME "a"
+#define dataNumbers 400
+
+float data[dataNumbers];
 
 uint16_t sinData[MaxSinDataNumbers];
 int SinDataNumbers;
+
+// Pin:
+//     OC1A : PB5
+//     OC1B : PB6
+//     OC1C : PB7
 
 // 10  -> 1388.89 hz  ps:200 dB才聽得到
 // 20  -> 666.67 hz
@@ -25,39 +38,70 @@ int SinDataNumbers;
 
 volatile int cnt=0;
 ISR(TIMER0_COMP_vect){
-	PORTA |= (1<<0);
-	setPWMDutyCycle(ChannelC, sinData[cnt]);
+	
+	setPWMDutyCycle(ChannelC, data[cnt]);
+	//setPWMDutyCycle(ChannelC, sinData[cnt]);
+	//OCR1C = data[cnt];
 	cnt++;
-	if(cnt >= SinDataNumbers){
+	if(cnt >= dataNumbers){
 		cnt = 0;
+		while(true);
 	}
-	PORTA &= ~(1<<0);
+	
 }
 
 int main(void){
     ASA_M128_set();
+
+	setSDCName("A", "TXT");
+	setSDCRead();
+	for(int k=0;k<1000;k++){
+		char readBuffx[6];
+		int calculateDatax = 0;
+		initBuffer(readBuffx);
+		getSDCData(readBuffx, 6);
+		int digitsx = getBufferSizeUseCRLF(readBuffx);
+	}
+	for(uint16_t n=0;n<dataNumbers;n++){
+		//PORTA |= (1<<1);
+		char readBuff[6];
+		int calculateData = 0;
+		initBuffer(readBuff);
+		getSDCData(readBuff, 6);
+		int digits = getBufferSizeUseCRLF(readBuff);
+		// printf("digits:%d\n", digits);
+		
+		for(int k=0;k<digits;k++){
+			int dpow=1;
+			for(int j=0;j<(digits-k-1);j++) dpow *= 10;
+			calculateData += dpow*ascii2num(readBuff[k]);
+			// printf("%d\n", ascii2num(readBuff[k]));
+		}
+		//data[n] = calculateData*25/256;
+		data[n] = calculateData*25/256;
+		printf("%d\n", calculateData);
+		//PORTA &= ~(1<<1);
+	}
+	closeSDC();
+	
 	float fr;
 	printf("Enter freq\n");
 	scanf("%f", &fr);
 	SinDataNumbers = 66.67/(fr/200);
-	DDRA |= (1<<0);
-	uint32_t freq;
-	printf("Enter PWM Frequency ...\n");
-	scanf("%lu", &freq);
+	for(int n=0;n<SinDataNumbers;n++){
+		sinData[n] = ((sin(2*pi*n/SinDataNumbers))+1) * 50;
+	}
 	setTimerPrescaler(1, 1);
 	setTimer1Mode(14);
 	setPWMTimer1Channel(ChannelC);
-	setPWMFrequency(freq);
+	setPWMFrequency(PWMFrequency);
 	
-	for(int n=0;n<SinDataNumbers;n++){
-		sinData[n] = ((sin(2*pi*n/SinDataNumbers))+1) * 50; 
-	}
-	
-	setTimer0_CompareInterrupt(13, 8);
+	setTimer0_CompareInterrupt(50, 256);
 	openTimer0();
 	
 	printf("Run main code ~~~\n");
     while (1){
+/*
 		float frequency;
 		printf("Enter frequency \n");
 		scanf("%f", &frequency);
@@ -67,7 +111,7 @@ int main(void){
 			sinData[n] = ((sin(2*pi*n/SinDataNumbers))+1) * 50;
 		}
 		cnt = 0;
-		openTimer0();
+		openTimer0();*/
     }
 }
 
