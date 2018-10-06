@@ -15,7 +15,7 @@
 #define MaxSinDataNumbers 200
 #define PWMFrequency 20000
 #define SDC_FILE_NAME "a"
-#define dataNumbers 400
+#define dataNumbers 100
 
 float data[dataNumbers];
 
@@ -39,13 +39,12 @@ int SinDataNumbers;
 volatile int cnt=0;
 ISR(TIMER0_COMP_vect){
 	
-	setPWMDutyCycle(ChannelC, data[cnt]);
-	//setPWMDutyCycle(ChannelC, sinData[cnt]);
+	//setPWMDutyCycle(ChannelC, data[cnt]);
+	setPWMDutyCycle(ChannelC, sinData[cnt]);
 	//OCR1C = data[cnt];
 	cnt++;
-	if(cnt >= dataNumbers){
+	if(cnt >= SinDataNumbers){
 		cnt = 0;
-		while(true);
 	}
 	
 }
@@ -53,6 +52,7 @@ ISR(TIMER0_COMP_vect){
 int main(void){
     ASA_M128_set();
 
+/*
 	setSDCName("A", "TXT");
 	setSDCRead();
 	for(int k=0;k<1000;k++){
@@ -82,7 +82,7 @@ int main(void){
 		printf("%d\n", calculateData);
 		//PORTA &= ~(1<<1);
 	}
-	closeSDC();
+	closeSDC();*/
 	
 	float fr;
 	printf("Enter freq\n");
@@ -90,17 +90,19 @@ int main(void){
 	SinDataNumbers = 66.67/(fr/200);
 	for(int n=0;n<SinDataNumbers;n++){
 		sinData[n] = ((sin(2*pi*n/SinDataNumbers))+1) * 50;
+		printf("->%d\n", sinData[n]);
 	}
 	setTimerPrescaler(1, 1);
 	setTimer1Mode(14);
 	setPWMTimer1Channel(ChannelC);
 	setPWMFrequency(PWMFrequency);
 	
-	setTimer0_CompareInterrupt(50, 256);
+	setTimer0_CompareInterrupt(13, 1);
 	openTimer0();
 	
 	printf("Run main code ~~~\n");
     while (1){
+
 /*
 		float frequency;
 		printf("Enter frequency \n");
