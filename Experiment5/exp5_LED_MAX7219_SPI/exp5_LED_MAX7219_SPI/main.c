@@ -58,7 +58,16 @@ uint8_t arrow_left[8] = {
 	  0b00100000,
 	  0b00000000
 	};
-
+uint8_t middle_finger[8] = {
+	  0b00011000,
+	  0b00011000,
+	  0b00011000,
+	  0b00011000,
+	  0b11111110,
+	  0b10101010,
+	  0b10101011,
+	  0b11111110
+};
 
 uint8_t disp1[38][8]={
 	{0x3C,0x42,0x42,0x42,0x42,0x42,0x42,0x3C}, //Char 0
@@ -148,6 +157,13 @@ int main(void)
 				testZeroToZ();
 			break;
 			case 5:
+				setPatternTo8_8Matrix(&smile[0]);
+			break;
+			case 6:
+				for(int i=0;i<10;i++){
+					setPatternAnimation(&middle_finger[0], 2, 2, 200, true);
+					setPatternAnimation(&middle_finger[0], 2, 2, 200, false);
+				}
 				setPatternTo8_8Matrix(&smile[0]);
 			break;
 			case 97:
