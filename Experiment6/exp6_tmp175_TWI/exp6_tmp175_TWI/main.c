@@ -7,6 +7,7 @@
 #define F_CPU 11059200
 #include <avr/io.h>
 #include <stdbool.h>
+#include "M128_Danny_Timer.h"
 #include "ASA_Lib.h"
 
 #define TMP175_ADDRESS 0x48
@@ -14,6 +15,7 @@
 #define M128_ACK_ADDRESS_RECIEVE 0x40
 #define M128_ACK_ADDRESS_TRANSMIT 0x18
 #define M128_ACK_DATA_TRANSMIT 0x28
+#define TCA9534A_SLAVE_ADDRESS 0x38
 
 void startTWI();
 void stopTWI();
@@ -22,30 +24,70 @@ void setTWIData(uint8_t send_data, bool ackOrNot);
 uint8_t getTWIData(bool ackOrNot);
 void ASA_ID_init();
 void ASA_ID_set(uint8_t data);
+void setAlloutput();
 
+bool flag = false;
 ISR(INT4_vect){
+	if(flag==false){
+		setTimer0_CompareInterrupt(107, 1024);
+		flag = true;
+		EIMSK &= ~(1<<INT4);
+		cli();
+		openTimer0();
+	}
+	
 	printf("========== Warning!!! ==========\n");
 }
+
+volatile int cnt = 0;
+char LEDdata = 1;
+
+ISR(TIMER0_COMP_vect){
+	cnt++;				
+	startTWI();
+	setTWIAddress(TCA9534A_SLAVE_ADDRESS, true);
+	setTWIData(0x01, false);  // command for config mode		
+	setTWIData(LEDdata, false);
+					
+	stopTWI();
+	
+	if(cnt%3==0){
+		LEDdata <<= 1;
+		if(LEDdata==0){
+			LEDdata = 1;
+		}
+	}
+	
+	if(cnt>=100){
+		startTWI();
+		setTWIAddress(TCA9534A_SLAVE_ADDRESS, true);
+		setTWIData(0x01, false);  // command for config mode
+		setTWIData(0, false);
+		LEDdata = 1;
+		cnt = 0;
+		flag = false;
+		TIMSK &= ~(1<<OCIE0);
+		cli();
+		EIMSK |= (1<<INT4);
+		sei();
+	}
+}
+
 
 int main(void){
 	float data;
 	ASA_M128_set();
-	
-	// setting INT4
-	DDRE &= ~(1<<PE4);
-	EICRB |= (1<<ISC41);
-	EIMSK |= (1<<INT4);
-	sei();
 	
 	// Set SCL Frequency, in temp175 high speed mode => 400 khz
 	// SCL_freq = CPU_Clock / (16 + 2*(TWBR) * 4^TWPS)     ,PS:TWPS:presaclar
 	TWSR |= (1<<TWPS0);    // Prescaler 4
 	//TWSR &= ~(1<<TWPS1);
 	TWBR = 0x20;
+	
 	ASA_ID_init();
 	ASA_ID_set(1);
 	uint8_t dataH, dataL;
-	
+	setAlloutput();
 	printf("========= Transmission =========\n");
 	startTWI();
 	printf("ACK ST:%x\n", (TWSR & 0xF8));
@@ -60,11 +102,18 @@ int main(void){
 	printf("========= Stop =========\n");
 	stopTWI();
 	
+	// setting INT4
+/*
+	DDRE &= ~(1<<PE4);
+	EICRB |= (1<<ISC41);
+	EIMSK |= (1<<INT4);
+	sei();*/
+	
 	printf("========= End mode Setting =========\n");
 	int configData;
 	int mode;
 	while (1) {
-		printf("alert : %d\n", (PINE>>PA4)&1);
+		printf("alert:%x\n", PINE);
 		printf("please enter mode\n");
 		scanf("%d", &mode);
 		switch(mode){
@@ -107,7 +156,7 @@ int main(void){
 				printf("ACK RD:%x\n", (TWSR & 0xF8));
 				printf("DataH:%x\n", dataH);
 		
-				dataL = getTWIData(true);
+				dataL = getTWIData(false);
 				printf("ACK RD:%x\n", (TWSR & 0xF8));
 				printf("DataL:%x\n", dataL);
 		
@@ -132,7 +181,7 @@ int main(void){
 				setTWIData(0x03, false);
 				printf("ACK SET:%x\n", (TWSR & 0xF8));
 				
-				setTWIData(30, true);
+				setTWIData(100, true);
 				printf("ACK SET:%x\n", (TWSR & 0xF8));
 
 				stopTWI();
@@ -148,7 +197,7 @@ int main(void){
 				setTWIData(0x02, false);
 				printf("ACK SET:%x\n", (TWSR & 0xF8));
 				
-				setTWIData(25, true);
+				setTWIData(0, true);
 				printf("ACK SET:%x\n", (TWSR & 0xF8));
 
 				stopTWI();
@@ -238,3 +287,23 @@ void ASA_ID_set(uint8_t data) {
 	PORTB |= (data<<PB5);
 
 };
+
+void setAlloutput(){	
+	printf("Init IO\n");
+				
+	startTWI();					
+	setTWIAddress(TCA9534A_SLAVE_ADDRESS, true);					
+	setTWIData(0x03, false);  // command for config mode			
+	setTWIData(0, false);
+					
+	stopTWI();
+					
+	// write all output 0 V
+	startTWI();
+	setTWIAddress(TCA9534A_SLAVE_ADDRESS, true);				
+	setTWIData(0x01, false);  // command for config mode				
+	setTWIData(0, false);			
+	stopTWI();
+
+}
+
